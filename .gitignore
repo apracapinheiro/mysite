@@ -4,5 +4,4 @@
 /media/
 *.sqlite3
 /venv_django3/
-vscode*
-
+.vscode*
