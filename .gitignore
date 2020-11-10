@@ -4,5 +4,6 @@
 /media/
 *.sqlite3
 /venv_django3/
+/venv_mysite/
 .vscode*
 /mysite/settings_local.py
