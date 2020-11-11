@@ -3,6 +3,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import ListView
 from taggit.models import Tag
+from django.db.models import Count
 
 from .forms import EmailPostForm, CommentForm
 from .models import Post, Comment
@@ -39,7 +40,7 @@ def post_detail(request, year, month, day, post):
     new_comment = None
 
     if request.method == 'POST':
-    # um comentario foi postado
+        # um comentario foi postado
         comment_form = CommentForm(data=request.POST)
         if comment_form.is_valid():
             # Cria o objeto Commentm, mas nao o salva no banco de dados
@@ -51,8 +52,14 @@ def post_detail(request, year, month, day, post):
     else:
         comment_form = CommentForm()
 
+    # Lista de postagens semelhantes
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
+
     return render(request, 'blog/post/detail.html',
-                  {'post': post, 'comments': comments, 'new_comment': new_comment, 'comment_form': comment_form})
+                  {'post': post, 'comments': comments, 'new_comment': new_comment, 'comment_form': comment_form,
+                   'similar_posts': similar_posts})
 
 
 class PostListView(ListView):

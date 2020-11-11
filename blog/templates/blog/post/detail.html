@@ -21,6 +21,16 @@
         </h2>
     {% endwith %}
 
+    <h3>Posts similares</h3>
+    {% for post in similar_posts %}
+        <p>
+            <a href="{{ post.get_absolute_url }}">{{ post.title }}</a>
+        </p>
+    {% empty %}
+        Não existem posts similares.
+    {% endfor %}
+
+
     {% for comment in comments %}
         <div class="comment">
             <p class="info">
