@@ -20,7 +20,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'g(ute044_1spb!_qiw*)(6l9i!amnpd4zz81b2&53*y_dw0s5l'
+# SECRET_KEY = 'g(ute044_1spb!_qiw*)(6l9i!amnpd4zz81b2&53*y_dw0s5l'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -39,10 +39,12 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'blog.apps.BlogConfig',
     'taggit',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -127,8 +129,16 @@ except ImportError as error:
     print(error)
     pass
 
+INTERNAL_IPS = [
+    '127.0.0.1',
+]
+
 # EMAIL_HOST = 'smtp.gmail.com'
 # EMAIL_HOST_USER = ''
 # EMAIL_HOST_PASSWORD = ''
 # EMAIL_PORT = 587
 # EMAIL_USE_TLS = True
+
+
+import dynaconf
+settings = dynaconf.DjangoDynaconf(__name__)
